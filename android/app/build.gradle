@@ -1,0 +1,82 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file('local.properties')
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withReader('UTF-8') { reader ->
+        localProperties.load(reader)
+    }
+}
+
+def flutterRoot = localProperties.getProperty('flutter.sdk')
+if (flutterRoot == null) {
+    //throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
+}
+
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
+
+apply plugin: 'com.android.application'
+apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
+
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+    compileSdkVersion 28
+
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+    defaultConfig {
+        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
+        applicationId "annaru.wl.com.repairproject"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        release {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile file(keystoreProperties['storeFile'])
+            storePassword keystoreProperties['storePassword']
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+        }
+    }
+
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0-alpha03'
+    compile 'androidx.appcompat:appcompat:1.1.0-alpha04'
+    /*compile 'cjt.library.wheel:camera:0.1.9'
+    compile 'cjt.library.wheel:camera:0.1.7' //修复无法获取最佳分辨率导致的StackOverFlowError
+    compile 'cjt.library.wheel:camera:0.1.6' //修复部分机型切换前置摄像头崩溃问题和添加动态权限申请
+    compile 'cjt.library.wheel:camera:0.1.2' //修复部分机型不支持缩放导致崩溃
+    compile 'cjt.library.wheel:camera:0.1.1' //修复切换前置摄像头崩溃BUG
+    compile 'cjt.library.wheel:camera:0.1.0' //修复BUG
+    compile 'cjt.library.wheel:camera:0.0.9' //添加保持屏幕常亮唤醒状态
+    compile 'cjt.library.wheel:camera:0.0.8' //添加手动对焦，对焦提示器，修复切换到前置摄像头崩溃的BUG
+    compile 'cjt.library.wheel:camera:0.0.7' //修复了长按录视频崩溃的BUG和兼容到Android4.0
+    compile 'cjt.library.wheel:camera:0.0.3'*/
+}

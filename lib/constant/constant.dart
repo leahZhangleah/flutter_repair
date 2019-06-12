@@ -1,0 +1,13 @@
+final String CAMERA="/camera";
+final String VIDEO_RECORDER_SCREEN="/video_recorder";
+final String HOME = "/home";
+final String CHAT = "/chat";
+final String SPLASH = "/splash";
+final String LOGIN = "/login";
+final String PICKCAMERA = "/pickcamera";
+final String REGISTER = "/register";
+final String CHOOSEPHOTO = "/chooosephoto";
+final String PHOTO = "/photo";
+final String REPAIR_CLASSIFY = "/reapir_classify";
+final String REPAIR_PUBLISH = "/repair_publish";
+final String CHOOSE_ADDRESS = "/choose_address";

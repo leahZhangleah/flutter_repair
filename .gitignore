@@ -1,0 +1,13 @@
+Headers/
+android/local.properties
+libraries/Dart_SDK.xml
+libraries/Flutter_Plugins.xml
+flutter_*
+.flutter-plugins
+!/.packages
+pubspec.lock
+/.idea/
+/Target Support Files/
+.flutter-plugins
+/build
+index.lock
