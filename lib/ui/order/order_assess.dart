@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:repair_project/http/api_request.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:repair_project/http/http_address_manager.dart';
 
 class Assess extends StatefulWidget {
   final String ordersNumber, ordersId;
@@ -21,32 +23,6 @@ class AssessState extends State<Assess> {
   double rating = 0;
   final _assess = TextEditingController();
 
-  Future<void> OrdersAppraise() async {
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String token = sp.getString("token");
-    Options options = new Options();
-    options.headers = {"token": token};
-    try {
-      Response response = await Dio().post(
-          "http://115.159.93.175:8281/repairs/repairsOrdersAppraise/save",
-          options: options,
-          data: {
-            'content': _assess.text,
-            'ordersId': widget.ordersId,
-            'ordersNumber': widget.ordersNumber,
-            'starLevel': rating
-          });
-      print(response.toString());
-      Fluttertoast.showToast(
-          msg: json
-              .decode(response.toString())
-              .cast<String, dynamic>()['msg']);
-      Navigator.pop(context);
-    } catch (e) {
-      print(e);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -61,7 +37,7 @@ class AssessState extends State<Assess> {
             GestureDetector(
                 onTap: () {
                   if (rating != 0) {
-                    OrdersAppraise();
+                    ApiRequest().appraiseOrders(context, _assess.text, widget.ordersId, widget.ordersNumber, rating);
                   } else {
                     Fluttertoast.showToast(msg: "请对服务进行评分");
                   }

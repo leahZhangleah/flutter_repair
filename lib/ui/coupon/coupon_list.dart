@@ -25,7 +25,7 @@ class CouponListState extends State<CouponList> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    cList = ApiRequest().fetchValidCouponList();
+    cList = ApiRequest().fetchValidCouponList(context);
   }
   @override
   Widget build(BuildContext context) {

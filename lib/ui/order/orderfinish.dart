@@ -37,18 +37,20 @@ class OrderFinishState extends State<OrderFinish>
 
   //已完成订单列表
   Future<void> getFinishedOrder(int nowPage, int limit) async {
-    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(nowPage, limit, "four"); //"four" represents for 已完成
+    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(context,nowPage, limit, "four"); //"four" represents for 已完成
     print(resultModel.data.toString());
-    setState(() {
-      _finishedOrders = QoInfo.allFromResponse(resultModel.data.toString());
-      total = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['page']['total'];
-      url = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['fileUploadServer'];
-    });
-    print(total);
+    if(mounted){
+      setState(() {
+        _finishedOrders = QoInfo.allFromResponse(resultModel.data.toString());
+        total = json
+            .decode(resultModel.data.toString())
+            .cast<String, dynamic>()['page']['total'];
+        url = json
+            .decode(resultModel.data.toString())
+            .cast<String, dynamic>()['fileUploadServer'];
+      });
+      print(total);
+    }
   }
 
   //下拉刷新
@@ -57,6 +59,7 @@ class OrderFinishState extends State<OrderFinish>
       setState(() {
         nowPage = 1;
         limit = 5;
+        _finishedOrders.clear();
         getFinishedOrder(nowPage, limit);
       });
     });
@@ -160,7 +163,7 @@ class OrderFinishState extends State<OrderFinish>
                                                 },
                                               ),
                                             ).then((_){
-                                              getFinishedOrder(nowPage, limit);
+                                              onHeaderRefresh();
                                             }):null;
                                           }))
                                 ],

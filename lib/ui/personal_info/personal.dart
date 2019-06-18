@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:repair_project/http/HttpUtils.dart';
 import 'package:repair_project/http/api_request.dart';
@@ -100,7 +101,7 @@ class PersonalState extends State<Personal> {
           height: 80.0,
           child: RaisedButton(
             onPressed: (){
-              ApiRequest().logout(context);
+              showConfirmDialog();
             },
             child: Text(
               "退出登录",
@@ -241,6 +242,58 @@ class PersonalState extends State<Personal> {
           CircularProgressIndicator(),
         ],
       ),
+    );
+  }
+
+  void showConfirmDialog() {
+    showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) {
+        return CupertinoAlertDialog(
+          title:
+          CupertinoDialogAction(
+            child: Text(
+              "确认退出",
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors
+                      .redAccent),
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              onPressed: () => ApiRequest().logout(context),
+              child: Container(
+                child: Text(
+                  "确定",
+                  style: TextStyle(
+                      fontSize:
+                      16,
+                      color: Colors
+                          .black),
+                ),
+              ),
+            ),
+            CupertinoDialogAction(
+              onPressed: () {
+                Navigator.pop(
+                    context);
+              },
+              child: Container(
+                child: Text(
+                  "取消",
+                  style: TextStyle(
+                      fontSize:
+                      14,
+                      color: Colors
+                          .black),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 

@@ -217,6 +217,7 @@ class OrderDetiailsState extends State<OrderDetiails> {
                               CupertinoDialogAction(
                                 onPressed: () =>
                                    ApiRequest().cancelOrder(
+                                     context,
                                         widget
                                             .id),
                                 child: Container(

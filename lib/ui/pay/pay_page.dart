@@ -42,7 +42,7 @@ class PaypageState extends State<Paypage> {
     super.initState();
     initWechat();
 
-    cList = ApiRequest().fetchUsableCouponList(widget.cost);
+    cList = ApiRequest().fetchUsableCouponList(context,widget.cost);
     fluwx.responseFromPayment.listen((data) {
       print(data.errCode);
     });

@@ -222,7 +222,7 @@ class RFQOrderDetailsState extends State<RFQOrderDetails> {
             ),
             actions: <Widget>[
               CupertinoDialogAction(
-                onPressed: () => ApiRequest().refuseOrderQuote(widget.id),
+                onPressed: () => ApiRequest().refuseOrderQuote(context,widget.id),
                 child: Container(
                   child: Text(
                     "确定",

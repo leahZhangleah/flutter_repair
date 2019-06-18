@@ -116,24 +116,6 @@ class RequestManager {
 }
 
 
-Future<bool> checkResponseValidation(BuildContext context,Response response)async {
-  var json = jsonDecode(response.toString());
-  if(!json['state']){
-    
-    Fluttertoast.showToast(msg: "登录信息已失效，请重新登录");
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String account = sp.getString("account");
-    Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (BuildContext context) =>new RegisterScreen(account)),
-        ModalRoute.withName('/'));
-    return false;
-  }else{
-    return true;
-  }
-}
-
-
 class HttpResultCode {
   static const NETWORK_ERROR = -1; //网络错误
   static const NETWORK_TIMEOUT = -2; //网络超时

@@ -33,17 +33,19 @@ class OrderQuoteState extends State<OrderQuote>
 
   //已报价订单列表
   Future<void> getQuotedOrder(int nowPage, int limit) async {
-    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(nowPage, limit, "three"); //"three" represents for 已报价
-    setState(() {
-      rfqOrder = QoInfo.allFromResponse(resultModel.data.toString());
-      total = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['page']['total'];
-      url = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['fileUploadServer'];
-    });
-    print(total);
+    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(context,nowPage, limit, "three"); //"three" represents for 已报价
+   if(mounted){
+     setState(() {
+       rfqOrder = QoInfo.allFromResponse(resultModel.data.toString());
+       total = json
+           .decode(resultModel.data.toString())
+           .cast<String, dynamic>()['page']['total'];
+       url = json
+           .decode(resultModel.data.toString())
+           .cast<String, dynamic>()['fileUploadServer'];
+     });
+     print(total);
+   }
   }
 
   //下拉刷新
@@ -52,6 +54,7 @@ class OrderQuoteState extends State<OrderQuote>
       setState(() {
         nowPage = 1;
         limit = 5;
+        rfqOrder.clear();
         getQuotedOrder(nowPage, limit);
       });
     });

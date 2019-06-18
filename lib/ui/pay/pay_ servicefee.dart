@@ -38,7 +38,7 @@ class PayfeeState extends State<Payfee> {
   void initState() {
     super.initState();
     initWechat();
-    cList = ApiRequest().fetchUsableCouponList(20);
+    cList = ApiRequest().fetchUsableCouponList(context,20);
   }
 
   void initWechat()async {

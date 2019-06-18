@@ -54,7 +54,7 @@ class MineState extends State<MinePage> with AutomaticKeepAliveClientMixin {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     changePersonalInfoBloc = Provider.of<ChangePersonalInfoBloc>(context);
-    changePersonalInfoBloc.getPersonalInfo();
+    changePersonalInfoBloc.getPersonalInfo(context);
   }
 
   @override

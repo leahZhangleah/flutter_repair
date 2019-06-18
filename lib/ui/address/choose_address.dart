@@ -45,14 +45,14 @@ class _ChooseAddressState extends State<ChooseAddress> {
   }
 
   Future<void> _addresslist() async {
-    ResultModel resultModel = await ApiRequest().fetchAddressList();
+    ResultModel resultModel = await ApiRequest().fetchAddressList(context);
     setState(() {
       _addresses = Address.allFromResponse(resultModel.data.toString());
     });
   }
 
   Future<void> _addressdel(String id) async {
-    ApiRequest().deleteAddress(id);
+    ApiRequest().deleteAddress(context,id);
     _addresslist();
   }
 

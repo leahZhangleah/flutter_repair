@@ -1,5 +1,7 @@
 
 import 'dart:async';
+import 'package:flutter/material.dart';
+
 import 'repairuser_db.dart';
 import 'personal_info_api.dart';
 import 'dart:io';
@@ -21,10 +23,10 @@ class ChangePersonalInfoBloc{
   }
 
 
-  Future<void> getPersonalInfo() async {
+  Future<void> getPersonalInfo(BuildContext context) async {
     bool internet = await RequestManager.hasInternet();
     if(internet){
-      RepairUserDB repairUserDB = await personalInfoApi.getPersonalInfo();
+      RepairUserDB repairUserDB = await personalInfoApi.getPersonalInfo(context);
       _repairsUserController.add(repairUserDB);
     }else{
       _repairsUserController.add(null);
@@ -32,10 +34,10 @@ class ChangePersonalInfoBloc{
 
   }
 
-  Future<void> updateImage(File file,String userId)async{
-    bool result = await personalInfoApi.updateImage(file, userId);
+  Future<void> updateImage(BuildContext context,File file,String userId)async{
+    bool result = await personalInfoApi.updateImage(context,file, userId);
     if(result){
-      await getPersonalInfo();
+      await getPersonalInfo(context);
     }
     /*if(repairUserDb!=null){
       _repairsUserController.add(repairUserDb);
@@ -44,9 +46,11 @@ class ChangePersonalInfoBloc{
     }*/
   }
 
-  Future<void> updateName(String id,String userId,String newName) async{
-    await personalInfoApi.updateName(id,userId, newName);
-    await getPersonalInfo();
+  Future<void> updateName(BuildContext context,String id,String userId,String newName) async{
+    bool result = await personalInfoApi.updateName(context,id,userId, newName);
+    if(result){
+      await getPersonalInfo(context);
+    }
     //todo
   }
 

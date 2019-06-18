@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/entity/description.dart';
+import 'package:repair_project/http/api_request.dart';
 import 'package:repair_project/ui/classify.dart';
 import 'package:repair_project/widgets/bottom_button.dart';
 import 'package:video_player/video_player.dart';
@@ -61,7 +62,10 @@ class PublishState extends State<PublishReapair> {
         });
       },
     );
-    description = Description.allFromResponse(response.toString());
+    bool valid = await ApiRequest().handleResponse(context, response);
+    if(valid){
+      description = Description.allFromResponse(response.toString());
+    }
   }
 
   Future<bool> checkInternetConnection() async {

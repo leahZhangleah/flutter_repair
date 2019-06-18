@@ -35,17 +35,20 @@ class OrderMissedState extends State<OrderMissed>
 
   //未接单订单列表
   Future<void> getYetReceiveOrder(int nowPage, int limit) async {
-    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(nowPage, limit, "one"); //"one" represents yet received orders
-    setState(() {
-      _yetReceiveOrder.addAll(Order.allFromResponse(resultModel.data.toString())) ;
-      total = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['page']['total'];
-      url = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['fileUploadServer'];
-    });
-    print(total);
+    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(context,nowPage, limit, "one"); //"one" represents yet received orders
+    if(mounted){
+      setState(() {
+        _yetReceiveOrder.addAll(Order.allFromResponse(resultModel.data.toString())) ;
+        total = json
+            .decode(resultModel.data.toString())
+            .cast<String, dynamic>()['page']['total'];
+        url = json
+            .decode(resultModel.data.toString())
+            .cast<String, dynamic>()['fileUploadServer'];
+      });
+      print(total);
+    }
+
   }
 
   //下拉刷新
@@ -54,6 +57,7 @@ class OrderMissedState extends State<OrderMissed>
       setState(() {
         nowPage = 1;
         limit = 5;
+        _yetReceiveOrder.clear();
         getYetReceiveOrder(nowPage, limit);
       });
     });
@@ -197,7 +201,7 @@ class OrderMissedState extends State<OrderMissed>
                                                                             .description);
                                                                   })).then((_){
                                                                     Navigator.pop(context);
-                                                                    getYetReceiveOrder(1, 5);
+                                                                    onHeaderRefresh();
                                                                   }),
                                                               child: Container(
                                                                 child: Text(
@@ -277,9 +281,9 @@ class OrderMissedState extends State<OrderMissed>
                                                       actions: <Widget>[
                                                         CupertinoDialogAction(
                                                           onPressed: () =>
-                                                              ApiRequest().cancelOrder(missedOrder.id).then((_){
+                                                              ApiRequest().cancelOrder(context,missedOrder.id).then((_){
                                                                         Navigator.of(context).pop();
-                                                                        getYetReceiveOrder(1, 5);
+                                                                        onHeaderRefresh();
                                                               }),
                                                           child: Container(
                                                             child: Text(

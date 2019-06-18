@@ -144,108 +144,110 @@ class UpdateAddressState extends State<UpdateAddress> {
               )))
         ],
       ),
-      body: Container(
-          decoration: BoxDecoration(color: Colors.grey[300]),
-          child: Column(
-            children: <Widget>[
-              Container(
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Padding(
-                          padding: EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                              controller: _name,
-                              decoration: new InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "添加人",
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey[200], fontSize: 18)))),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Divider(
-                          height: 2,
-                          color: Colors.grey,
+      body: SingleChildScrollView(
+        child: Container(
+            decoration: BoxDecoration(color: Colors.grey[300]),
+            child: Column(
+              children: <Widget>[
+                Container(
+                    decoration: BoxDecoration(color: Colors.white),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: TextField(
+                                controller: _name,
+                                decoration: new InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "添加人",
+                                    hintStyle: TextStyle(
+                                        color: Colors.grey[200], fontSize: 18)))),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: Divider(
+                            height: 2,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                              controller: _phone,
-                              keyboardType: TextInputType.number,
-                              decoration: new InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "添加人电话号码",
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey[200], fontSize: 18)))),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Divider(
-                          height: 2,
-                          color: Colors.grey,
+                        Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: TextField(
+                                controller: _phone,
+                                keyboardType: TextInputType.number,
+                                decoration: new InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "添加人电话号码",
+                                    hintStyle: TextStyle(
+                                        color: Colors.grey[200], fontSize: 18)))),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: Divider(
+                            height: 2,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 15, right: 15),
-                          child: TextField(
-                              controller: _province,
-                              onTap: _incrementCounter,
-                              decoration: new InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "添加人地区",
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey[200], fontSize: 18)))),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Divider(
-                          height: 2,
-                          color: Colors.grey,
+                        Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15),
+                            child: TextField(
+                                controller: _province,
+                                onTap: _incrementCounter,
+                                decoration: new InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "添加人地区",
+                                    hintStyle: TextStyle(
+                                        color: Colors.grey[200], fontSize: 18)))),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: Divider(
+                            height: 2,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding:
-                              EdgeInsets.only(left: 15, right: 15, bottom: 5),
-                          child: TextField(
-                              controller: _address,
-                              decoration: new InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "详细地址：如道路、门牌号、小号、楼栋号等",
-                                  hintStyle: TextStyle(
-                                      color: Colors.grey[200], fontSize: 18)))),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                        child: Divider(
-                          height: 2,
-                          color: Colors.grey,
+                        Padding(
+                            padding:
+                                EdgeInsets.only(left: 15, right: 15, bottom: 5),
+                            child: TextField(
+                                controller: _address,
+                                decoration: new InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "详细地址：如道路、门牌号、小号、楼栋号等",
+                                    hintStyle: TextStyle(
+                                        color: Colors.grey[200], fontSize: 18)))),
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                          child: Divider(
+                            height: 2,
+                            color: Colors.grey,
+                          ),
                         ),
-                      ),
-                      Padding(
-                          padding: EdgeInsets.only(left: 15, right: 15, top:50,bottom: 5),
-                          child: Row(
-                            children: <Widget>[
-                              Text("是否设为默认地址"),
-                              Switch(
-                                value: check[widget.defaultAddress],
-                                activeColor: Colors.blue, // 激活时原点颜色
-                                onChanged: (val) {
-                                  this.setState(() {
-                                    check[widget.defaultAddress]=val;
-                                    val?da=1:da=0;
-                                    print(da);
-                                  });
-                                },
-                              )
-                            ],
-                          ))
-                    ],
-                  )),
-              Expanded(
-                flex: 5,
-                child: Container(),
-              ),
-            ],
-          )),
+                        Padding(
+                            padding: EdgeInsets.only(left: 15, right: 15, top:50,bottom: 5),
+                            child: Row(
+                              children: <Widget>[
+                                Text("是否设为默认地址"),
+                                Switch(
+                                  value: check[widget.defaultAddress],
+                                  activeColor: Colors.blue, // 激活时原点颜色
+                                  onChanged: (val) {
+                                    this.setState(() {
+                                      check[widget.defaultAddress]=val;
+                                      val?da=1:da=0;
+                                      print(da);
+                                    });
+                                  },
+                                )
+                              ],
+                            ))
+                      ],
+                    )),
+                Expanded(
+                  flex: 5,
+                  child: Container(),
+                ),
+              ],
+            )),
+      ),
     );
   }
 }

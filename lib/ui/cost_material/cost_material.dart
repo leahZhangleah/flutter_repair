@@ -84,8 +84,7 @@ class CostMaterialState extends State<CostMaterial> with AutomaticKeepAliveClien
   }
 
   Future _material(int nowPage,int limit) async{
-    ResultModel resultModel = await ApiRequest().getMaterialList(nowPage, limit);
-    print(resultModel.data.toString());
+    ResultModel resultModel = await ApiRequest().getMaterialList(context,nowPage, limit);
     setState(() {
       _materialInfo = MaterialInfo.allFromResponse(resultModel.data.toString());
       total = json

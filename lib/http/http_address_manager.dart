@@ -25,7 +25,11 @@ class HttpAddressMananger{
   String _personalInfo="/repairs/repairsUser/personalInfo";
   String _logout = "/repairs/logout";
   String _fileUploadServer = "https://tac-xiuyixiu-ho-1258818500.cos.ap-shanghai.myqcloud.com";
+  String _saveAppraise = "/repairs/repairsOrdersAppraise/save";
 
+  String getSaveAppraiseUrl(){
+    return getFullAddress(_saveAppraise);
+  }
 
   String getUpdatePersonalInfoUrl(){
     return getFullAddress(_updatePersonalInfo);

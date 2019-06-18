@@ -69,7 +69,7 @@ class NameState extends State<Name> {
                     return;
                   }
                   //updatePersonalInfo();
-                  personalInfoBloc.updateName(widget.id, widget.userId,_controller.text);
+                  personalInfoBloc.updateName(context,widget.id, widget.userId,_controller.text);
                   Navigator.pop(context,_controller.text);
                 },
                 child: Center(

@@ -34,15 +34,17 @@ class OrderRFQState extends State<OrderRFQ> with AutomaticKeepAliveClientMixin {
 
   //待报价订单列表
   Future<void> getWaitingForQuoteOrder(int nowPage, int limit) async {
-    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(nowPage, limit,"two"); //"two" represents waiting for quote
-    setState(() {
-      rfqOrder.addAll(Order.allFromResponse(resultModel.data.toString()));
-      total = json
-          .decode(resultModel.data.toString())
-          .cast<String, dynamic>()['page']['total'];
-      url = json.decode(resultModel.data.toString()).cast<String,dynamic>()['fileUploadServer'];
-    });
-    print(total);
+    ResultModel resultModel = await ApiRequest().getOrderListForDiffType(context,nowPage, limit,"two"); //"two" represents waiting for quote
+   if(mounted){
+     setState(() {
+       rfqOrder.addAll(Order.allFromResponse(resultModel.data.toString()));
+       total = json
+           .decode(resultModel.data.toString())
+           .cast<String, dynamic>()['page']['total'];
+       url = json.decode(resultModel.data.toString()).cast<String,dynamic>()['fileUploadServer'];
+     });
+     print(total);
+   }
   }
 
   //下拉刷新
@@ -51,6 +53,7 @@ class OrderRFQState extends State<OrderRFQ> with AutomaticKeepAliveClientMixin {
       setState(() {
         nowPage = 1;
         limit = 5;
+        rfqOrder.clear();
         getWaitingForQuoteOrder(nowPage, limit);
       });
     });

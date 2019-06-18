@@ -43,7 +43,7 @@ class ImagecutState extends State<Imagecut> {
         actions: <Widget>[
           GestureDetector(
               onTap: (){
-                personalInfoBloc.updateImage(imageFile, widget.userId);
+                personalInfoBloc.updateImage(context,imageFile, widget.userId);
                 Navigator.pop(context);
               },
               child: Center(
