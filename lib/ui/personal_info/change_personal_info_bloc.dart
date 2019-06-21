@@ -35,10 +35,14 @@ class ChangePersonalInfoBloc{
   }
 
   Future<void> updateImage(BuildContext context,File file,String userId)async{
-    bool result = await personalInfoApi.updateImage(context,file, userId);
-    if(result){
-      await getPersonalInfo(context);
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      bool result = await personalInfoApi.updateImage(context,file, userId);
+      if(result){
+        await getPersonalInfo(context);
+      }
     }
+
     /*if(repairUserDb!=null){
       _repairsUserController.add(repairUserDb);
     }else{
@@ -47,9 +51,12 @@ class ChangePersonalInfoBloc{
   }
 
   Future<void> updateName(BuildContext context,String id,String userId,String newName) async{
-    bool result = await personalInfoApi.updateName(context,id,userId, newName);
-    if(result){
-      await getPersonalInfo(context);
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      bool result = await personalInfoApi.updateName(context,id,userId, newName);
+      if(result){
+        await getPersonalInfo(context);
+      }
     }
     //todo
   }

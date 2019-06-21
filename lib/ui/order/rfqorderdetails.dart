@@ -180,7 +180,7 @@ class RFQOrderDetailsState extends State<RFQOrderDetails> {
                                         BorderRadius.all(Radius.circular(5))),
                                 onPressed: null,
                                 child: Container(
-                                    child: widget.state == 20
+                                    child: widget.state == 22
                                         ? Text("待维修",
                                             style: new TextStyle(
                                                 color: Colors.lightBlue))

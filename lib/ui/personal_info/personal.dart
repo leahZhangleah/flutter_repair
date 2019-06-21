@@ -216,8 +216,8 @@ class PersonalState extends State<Personal> {
       CachedNetworkImage cachedNetworkImage = CachedNetworkImage(
         fit: BoxFit.fill,
         imageUrl: networkImgUrl,
-        placeholder: new CircularProgressIndicator(),
-        errorWidget: new Icon(Icons.error),
+        placeholder: (context,text)=>new CircularProgressIndicator(),
+        errorWidget: (context,text,object)=>new Icon(Icons.error),
       );
       //updateImgPathInDB(networkImgUrl,cachedNetworkImage.cacheManager);
       return cachedNetworkImage;

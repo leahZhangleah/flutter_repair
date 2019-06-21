@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/entity/address.dart';
 import 'package:repair_project/entity/description.dart';
+import 'package:repair_project/http/api_request.dart';
 import 'package:repair_project/ui/MainScreen.dart';
 import 'package:repair_project/ui/order/orderlist.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,39 +42,6 @@ class DetailState extends State<Detail> {
   @override
   void deactivate() {
     super.deactivate();
-  }
-
-  void publish() async {
-
-    SharedPreferences sp = await SharedPreferences.getInstance();
-    String token = sp.getString("token");
-    Options options = new Options();
-    options.headers={"token":token};
-    try {
-      Response response = await Dio().post(HttpAddressMananger().getPublishOrderUrl(),
-          options: options,
-          data: {'contactsAddress':widget.address.city==widget.address.province?widget.address.province+widget.address.district+widget.address.detailedAddress:widget.address.province+widget.address.city+widget.address.district+widget.address.detailedAddress,
-          'contactsName':widget.address.name,
-          'contactsPhone':widget.address.phone,
-          'description':widget.detail,
-          'type':c[widget.classify].toString(),
-          'repairsOrdersDescriptionList':[
-            {
-              "fileName": widget.description.fileName,
-              "type": widget.description.type,
-              "url": widget.description.url
-            }
-          ]});
-      print(response);
-    } catch (e) {
-      print(e);
-    }
-
-    Fluttertoast.showToast(msg: "发布成功！");
-
-    Navigator.of(context).pushAndRemoveUntil(
-        new MaterialPageRoute(builder: (c) => new Main(tabindex: 1,)
-        ), (route) => route == null);
   }
 
   @override
@@ -186,7 +154,7 @@ class DetailState extends State<Detail> {
       bottomNavigationBar: BottomAppBar(
         child: Container(height: 80.0,
           child: RaisedButton(
-            onPressed: publish,
+            onPressed: ()=>ApiRequest().publish(context, widget.detail, widget.url, widget.description, widget.classify, widget.address),
             child: Text("保存",style: TextStyle(fontSize: 22),),
             color: Colors.lightBlue,),),
       ),

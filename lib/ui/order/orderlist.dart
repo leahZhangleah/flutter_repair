@@ -66,7 +66,9 @@ class OrderListState extends State<OrderList> with SingleTickerProviderStateMixi
                   indicatorSize: TabBarIndicatorSize.tab,
                 ),
               ),
-      body: ScrollConfiguration(behavior: MyBehavior(), child: TabBarView(
+      body: ScrollConfiguration(
+        behavior: MyBehavior(),
+        child: TabBarView(
         controller: mController,
         children: tabList.map((item) {
           return  Stack(

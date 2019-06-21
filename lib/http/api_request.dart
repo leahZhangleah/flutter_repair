@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/constant/constant.dart';
+import 'package:repair_project/entity/address.dart';
+import 'package:repair_project/entity/description.dart';
 import 'package:repair_project/entity/payment.dart';
 import 'package:repair_project/http/HttpUtils.dart';
 import 'package:repair_project/http/http_address_manager.dart';
@@ -11,6 +13,11 @@ import 'package:repair_project/ui/MainScreen.dart';
 import 'package:repair_project/ui/coupon/coupon_description.dart';
 import 'package:repair_project/ui/coupon/coupon_response.dart';
 import 'package:repair_project/ui/login/register.dart';
+import 'package:repair_project/ui/order/order_detail_bean/orders.dart';
+import 'package:repair_project/ui/order/order_detail_bean/order_detail_response.dart';
+import 'package:repair_project/ui/order/order_list_bean/order_list_response.dart';
+import 'package:repair_project/ui/order/order_list_bean/page.dart';
+import 'package:repair_project/ui/repair_service/repairs_service_response.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fluwx/fluwx.dart' as fluwx;
 import 'package:flutter/material.dart';
@@ -21,6 +28,101 @@ class ApiRequest{
     SharedPreferences sp = await SharedPreferences.getInstance();
     String token = sp.getString("token");
     return token;
+  }
+
+  void saveServiceCharge(String service)async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    sp.setString("service", service);
+  }
+
+  Future<String> getServiceCharge()async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String service = sp.getString("service");
+    if(service !=null){
+      return service;
+    }
+    return null;
+  }
+
+  //todo: get service fee
+  Future<void> getRepairsServiceCharge(BuildContext context)async{
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      try{
+        String token = await getToken();
+        RequestManager.baseHeaders = {"token": token};
+        ResultModel resultModel = await RequestManager.requestGet(HttpAddressMananger().repairsServiceCharge,{});
+        bool valid = await handleResultModel(context, resultModel);
+        if(valid){
+          var json = jsonDecode(resultModel.data.toString());
+          RepairsServiceCharge charge = RepairsServiceResponse.fromJson(json).repairsServiceCharge;
+          if(charge.isclose==0){
+              String service = charge.serviceCharge;
+              saveServiceCharge(service);
+          }
+        }
+      }on DioError catch(e){
+        handleDioError(e);
+      }
+    }
+  }
+  
+  //todo:发布订单
+  void publish(BuildContext context,String detail, String url,Description description, num classify,Address address) async {
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      var classification = ['墙面开裂', '水路维修', '电路维修', '其他维修'];
+      SharedPreferences sp = await SharedPreferences.getInstance();
+      String token = sp.getString("token");
+      Options options = new Options();
+      options.headers={"token":token};
+      try {
+        Response response = await Dio().post(HttpAddressMananger().getPublishOrderUrl(),
+            options: options,
+            data: {'contactsAddress':address.city==address.province?address.province+address.district+address.detailedAddress:address.province+address.city+address.district+address.detailedAddress,
+              'contactsName':address.name,
+              'contactsPhone':address.phone,
+              'description':detail,
+              'type':classification[classify].toString(),
+              'ordersDescriptionList':[
+                {
+                  "fileName": description.fileName,
+                  "type": description.type,
+                  "url": description.url
+                }
+              ]});
+        bool valid = await handleResponse(context, response);
+        if(valid){
+          Fluttertoast.showToast(msg: "发布成功！");
+
+          Navigator.of(context).pushAndRemoveUntil(
+              new MaterialPageRoute(builder: (c) => new Main(tabindex: 1,)
+              ), (route) => route == null);
+        }
+        print(response);
+      } on DioError catch (e) {
+       handleDioError(e);
+      }
+    }
+
+  }
+
+  Future<Orders> getOrderDetailById(BuildContext context,String id)async{
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      try{
+        String token = await getToken();
+        RequestManager.baseHeaders = {"token": token};
+        ResultModel resultModel = await RequestManager.requestGet(HttpAddressMananger().orderDetailById+id,{});
+        bool valid = await handleResultModel(context, resultModel);
+        if(valid){
+          var json = jsonDecode(resultModel.data.toString());
+          return OrderDetailResponse.fromJson(json).orders;
+        }
+      }on DioError catch(e){
+        handleDioError(e);
+      }
+    }
   }
   
   //todo:coupon
@@ -271,7 +373,7 @@ class ApiRequest{
   
   //todo:order
   //不同类型订单列表
-  Future<ResultModel> getOrderListForDiffType(BuildContext context,int nowPage, int limit,String typeList) async {
+  Future<Page> getOrderListForDiffType(BuildContext context,int nowPage, int limit,String typeList) async {
     bool internet = await RequestManager.hasInternet();
     if(internet){
       try{
@@ -283,7 +385,9 @@ class ApiRequest{
         bool valid = await handleResultModel(context, resultModel);
         if(valid){
           print(resultModel.data.toString());
-          return resultModel;
+          var json = jsonDecode(resultModel.data.toString());
+          OrderListResponse orderListResponse = OrderListResponse.fromJson(json);
+          return orderListResponse.page;
         }
       }on DioError catch(e){
         handleDioError(e);
@@ -306,7 +410,8 @@ class ApiRequest{
         bool valid = await handleResultModel(context, resultModel);
         if(valid){
           print(resultModel.data.toString());
-          Fluttertoast.showToast(msg: resultModel.data['msg']);
+          var json = jsonDecode(resultModel.data.toString());
+          Fluttertoast.showToast(msg:json['msg']);
         }
       }
     }on DioError catch(e){

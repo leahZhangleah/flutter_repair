@@ -1,5 +1,6 @@
 class HttpAddressMananger{
-  String _domain = "http://www.shyysy.xyz";
+  //String _domain = "http://www.shyysy.xyz";
+  String _domain = "http://115.159.93.175:8281";
   String _uploadVideo = "/upload/uploadVideo";
   String _addressList="/repairs/repairsUserAddress/listAll";
   String _addressDelete = "/repairs/repairsUserAddress/delete";
@@ -26,6 +27,8 @@ class HttpAddressMananger{
   String _logout = "/repairs/logout";
   String _fileUploadServer = "https://tac-xiuyixiu-ho-1258818500.cos.ap-shanghai.myqcloud.com";
   String _saveAppraise = "/repairs/repairsOrdersAppraise/save";
+  String _orderDetailById = "/repairs/repairsOrders/info/";
+  String _repairsServiceCharge = "/repairs/repairsServiceCharge/getRepairsServiceCharge";
 
   String getSaveAppraiseUrl(){
     return getFullAddress(_saveAppraise);
@@ -121,6 +124,12 @@ class HttpAddressMananger{
   String get logout => _logout;
 
   String get fileUploadServer => _fileUploadServer;
+
+  String get orderDetailById => _orderDetailById;
+
+  String get saveAppraise => _saveAppraise;
+
+  String get repairsServiceCharge => _repairsServiceCharge;
 
 
 }

@@ -30,7 +30,7 @@ dependencies:
   fluttertoast: ^2.1.4
   video_player: ^0.7.2
   image_picker: ^0.4.10
-  path_provider: ^0.4.1
+  path_provider: ^0.5.0+1
   common_utils: 1.0.9
   shared_preferences: ^0.4.2
   json_annotation: ^2.0.0
@@ -48,6 +48,9 @@ dependencies:
   sqflite:
   path:
   cached_network_image:
+  jpush_flutter : 0.0.11
+  flutter_cache_manager : ^0.3.2
+  qr_flutter: ^2.0.0
 
 dev_dependencies:
   flutter_test:
@@ -72,28 +75,32 @@ flutter:
   #  - images/a_dot_ham.jpeg
 
   assets:
-   - images/avatar.png
-   - images/sea.png
-   - images/star.jpg
-   - images/cat.jpg
-   - images/horse.jpg
-   - images/road.jpg
-   - images/test.png
-   - images/f1.png
-   - images/homepagebtn.png
-   - images/wxpay.png
-   - images/onsale(left).png
-   - images/onsale(right).png
+    - images/
+    - assets/images/
+    - assets/data/china.json
+    - assets/data/contacts.json
+#   - images/avatar.png
+#   - images/sea.png
+#   - images/star.jpg
+#   - images/cat.jpg
+#   - images/horse.jpg
+#   - images/road.jpg
+#   - images/test.png
+#   - images/f1.png
+#   - images/homepagebtn.png
+#   - images/wxpay.png
+#   - images/onsale(left).png
+#   - images/onsale(right).png
+#   - images/person_placeholder.png
 
-   - assets/data/china.json
-   - assets/data/contacts.json
-   - assets/images/coupon_bg_bottom.png
-   - assets/images/coupon_bg_right.png
-   - assets/images/coupon_bg_left.png
-   - assets/images/angelbaby.jpeg
-   - assets/images/alucard.jpg
-   - assets/images/logo.png
-   - assets/images/default_img.png
+#   - assets/images/coupon_bg_bottom.png
+#   - assets/images/coupon_bg_right.png
+#   - assets/images/coupon_bg_left.png
+#   - assets/images/angelbaby.jpeg
+#   - assets/images/alucard.jpg
+#   - assets/images/logo.png
+#   - assets/images/default_img.png
+#   - assets/images/person_placeholder.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.

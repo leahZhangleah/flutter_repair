@@ -3,6 +3,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:repair_project/http/api_request.dart';
 import 'package:repair_project/ui/camera.dart';
 import 'package:repair_project/ui/cost_material/cost_material.dart';
 import 'package:repair_project/ui/order/orderlist.dart';
@@ -11,6 +12,7 @@ import 'package:repair_project/ui/personal_info/change_personal_info_bloc.dart';
 import 'package:repair_project/ui/personal_info/personal_info_api.dart';
 import 'package:repair_project/ui/publish_repair.dart';
 import 'package:repair_project/ui/personal_info/mine_page.dart';
+import 'package:repair_project/ui/repair_service/repairs_service_response.dart';
 /**
  * 主界面
  */
@@ -33,10 +35,12 @@ class MainScreenState extends State<Main> with SingleTickerProviderStateMixin {
 
   void initState(){
     super.initState();
+    ApiRequest().getRepairsServiceCharge(context);
     if(widget.tabindex!=null){
       _tabIndex = widget.tabindex;
     }return;
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/constant/constant.dart';
 import 'package:repair_project/entity/RegisterResponse.dart';
+import 'package:repair_project/http/HttpUtils.dart';
 import 'package:repair_project/http/api_request.dart';
 import 'package:repair_project/widgets/titlebar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -170,18 +171,22 @@ class RegisterState extends State<RegisterScreen> {
       ///只有输入的内容符合要求通过才会到达此处
       _formKey.currentState.save();
     }else {return;}
-    RegisterResponse result;
-    Response res = await dio.get(HttpAddressMananger().getCaptchaSMS(),
-        data: {"phone": widget._phone});
-    if (res.statusCode == 200) {
-      result = RegisterResponse.fromJson(res.data);
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      RegisterResponse result;
+      Response res = await dio.get(HttpAddressMananger().getCaptchaSMS(),
+          data: {"phone": widget._phone});
+      if (res.statusCode == 200) {
+        result = RegisterResponse.fromJson(res.data);
+      }
+      if (result.state) {
+        setState(() {
+          _isAllowCapcha = !_isAllowCapcha;
+        });
+        updateButtonState();
+      }
     }
-    if (result.state) {
-      setState(() {
-        _isAllowCapcha = !_isAllowCapcha;
-      });
-      updateButtonState();
-    }
+
   }
 
   Future _login() async {

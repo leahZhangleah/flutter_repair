@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/entity/description.dart';
+import 'package:repair_project/http/HttpUtils.dart';
 import 'package:repair_project/http/api_request.dart';
 import 'package:repair_project/ui/classify.dart';
 import 'package:repair_project/widgets/bottom_button.dart';
@@ -46,25 +47,28 @@ class PublishState extends State<PublishReapair> {
   }
 
   Future<void> _uploadVideo(String _url) async {
-    Dio dio = new Dio();
-    FormData formData = new FormData.from({
-      "file": new UploadFileInfo(new File(_url), _url),
-    });
+    bool internet = await RequestManager.hasInternet();
+    if(internet){
+      Dio dio = new Dio();
+      FormData formData = new FormData.from({
+        "file": new UploadFileInfo(new File(_url), _url),
+      });
 
-    Response response = await dio.post(
-      HttpAddressMananger().getUploadVideoAddress(),//"http://115.159.93.175:80/upload/uploadVideo"
-      data: formData,
-      onUploadProgress: (int sent, int total) {
-        setState(() {
-          _percent = sent / total;
-          _value = _percent * 100;
-          __value = _value.toStringAsFixed(0);
-        });
-      },
-    );
-    bool valid = await ApiRequest().handleResponse(context, response);
-    if(valid){
-      description = Description.allFromResponse(response.toString());
+      Response response = await dio.post(
+        HttpAddressMananger().getUploadVideoAddress(),//"http://115.159.93.175:80/upload/uploadVideo"
+        data: formData,
+        onUploadProgress: (int sent, int total) {
+          setState(() {
+            _percent = sent / total;
+            _value = _percent * 100;
+            __value = _value.toStringAsFixed(0);
+          });
+        },
+      );
+      bool valid = await ApiRequest().handleResponse(context, response);
+      if(valid){
+        description = Description.allFromResponse(response.toString());
+      }
     }
   }
 
