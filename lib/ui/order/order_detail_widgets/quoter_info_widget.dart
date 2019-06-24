@@ -12,6 +12,7 @@ class QuoterInfoWidget extends StatelessWidget{
     QuoteUser quoteUser = orders.quoteUser;
     return quoteUser!=null?
     Container(
+      margin: EdgeInsets.only(top: 10),
       height: 75,
       color: Colors.white,
       padding: EdgeInsets.all(10),

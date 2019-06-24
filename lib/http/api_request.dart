@@ -434,7 +434,8 @@ class ApiRequest{
         if(valid){
           print("refuse quote" + resultModel.data.toString());
           //todo: toast msg to user to tell if user has refused the quote successfully
-          Fluttertoast.showToast(msg: resultModel.data['msg']);
+          var json = jsonDecode(resultModel.data.toString());
+          Fluttertoast.showToast(msg: json['msg']);
         }
       }on DioError catch(e){
         handleDioError(e);
@@ -591,7 +592,7 @@ Future<void> login(BuildContext context,Dio dio,String phone,String capcha) asyn
 
 
 //todo:appraise
-  Future<void> appraiseOrders(BuildContext context, String feedback,String ordersId,String ordersNumber,double rating) async {
+  Future<bool> appraiseOrders(BuildContext context, String feedback,String ordersId,String ordersNumber,double rating) async {
     bool internet = await RequestManager.hasInternet();
     if(internet){
       try{
@@ -616,13 +617,16 @@ Future<void> login(BuildContext context,Dio dio,String phone,String capcha) asyn
                     .decode(response.toString())
                     .cast<String, dynamic>()['msg']);
             Navigator.pop(context);
+            return true;
           }
 
         } catch (e) {
           print(e);
+          return false;
         }
       }on DioError catch(e){
         handleDioError(e);
+        return false;
       }
 
     }

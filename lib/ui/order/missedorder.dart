@@ -5,6 +5,7 @@ import 'package:flutter_refresh/flutter_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/entity/order.dart';
 import 'package:repair_project/http/HttpUtils.dart';
+import 'package:repair_project/ui/order/bottom_bar_helper.dart';
 import 'package:repair_project/ui/order/order_detail_bean/orders.dart';
 import 'package:repair_project/ui/order/order_details.dart';
 import 'package:repair_project/ui/order/order_list_bean/page.dart';
@@ -82,17 +83,17 @@ class OrderMissedState extends State<OrderMissed>
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-      color: Colors.grey[200],
-        //decoration: BoxDecoration(color: Colors.grey[200]),
+      //color: Colors.grey[200],
+        decoration: BoxDecoration(color: Colors.grey[200]),
         child: Refresh(
             onFooterRefresh: onFooterRefresh,
             onHeaderRefresh: onHeaderRefresh,
-            childBuilder:(BuildContext context, {ScrollController controller,ScrollPhysics physics}){
-              return _yetReceiveOrder.isEmpty?
-              Text("没有更多的订单了"):
-              ListView.builder(
-                  itemCount: _yetReceiveOrder.length,
+            child: ListView.builder(
+                  itemCount: _yetReceiveOrder.length ==0? 1:_yetReceiveOrder.length,
                   itemBuilder: (context, index) {
+                    if(_yetReceiveOrder.length==0){
+                      return Center(child: Text("暂无相关数据~"),);
+                    }
                     var missedOrder = _yetReceiveOrder[index];
                     return Padding(
                         padding: EdgeInsets.fromLTRB(10, 15, 10, 5),
@@ -141,169 +142,13 @@ class OrderMissedState extends State<OrderMissed>
                                           MainAxisAlignment.end,
                                           children: <Widget>[
                                             missedOrder.orderState == 0
-                                                ? OutlineButton(
-                                                borderSide: BorderSide(
-                                                    width: 1,
-                                                    color: Colors.lightBlue),
-                                                color: Colors.lightBlue,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius: BorderRadius.all(Radius.circular(5))),
-                                                child: Text("确认发布", style: new TextStyle(color: Colors.lightBlue)),
-                                                onPressed: () {
-                                                  showDialog<bool>(
-                                                    barrierDismissible: false,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return CupertinoAlertDialog(
-                                                        title:
-                                                        CupertinoDialogAction(
-                                                          child: Text(
-                                                            "订单发布",
-                                                            style: TextStyle(
-                                                                fontSize: 18,
-                                                                color: Colors
-                                                                    .redAccent),
-                                                          ),
-                                                        ),
-                                                        content:
-                                                        CupertinoDialogAction(
-                                                          child: Text(
-                                                            //todo: need to write new http request to get service fee
-                                                            "发布订单需要支付 ￥ $serviceCharge 元的服务费",
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                color: Colors
-                                                                    .black),
-                                                          ),
-                                                        ),
-                                                        actions: <Widget>[
-                                                          CupertinoDialogAction(
-                                                            onPressed: () =>
-                                                                Navigator.push(
-                                                                    context,
-                                                                    new MaterialPageRoute(builder:
-                                                                        (BuildContext
-                                                                    context) {
-                                                                      return new Payfee(
-                                                                          id: missedOrder.id,
-                                                                          des: missedOrder.description);
-                                                                    })).then((_){
-                                                                  Navigator.pop(context);
-                                                                  onHeaderRefresh();
-                                                                }),
-                                                            child: Container(
-                                                              child: Text(
-                                                                "确定",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                    16,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          CupertinoDialogAction(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: Container(
-                                                              child: Text(
-                                                                "取消",
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                    14,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                })
-                                                : Container(
-                                              padding: EdgeInsets.all(5.0),
-                                              child: Text("已发布", style: new TextStyle(color: Colors.black)),
-                                            ),
+                                                ? BottomBarHelper().buildPublishButton(context, missedOrder.id, missedOrder.description)
+                                                : BottomBarHelper().buildStatusButton("已发布"),
                                             Padding(
                                               padding: EdgeInsets.only(right: 5),
                                             ),
                                             missedOrder.orderState == 0?
-                                            OutlineButton(
-                                                borderSide: BorderSide(
-                                                    width: 1, color: Colors.grey),
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                    BorderRadius.all(
-                                                        Radius.circular(5))),
-                                                child: Text("取消订单",
-                                                    style: new TextStyle(
-                                                        color: Colors.black)),
-                                                onPressed: () {
-                                                  showDialog<bool>(
-                                                    barrierDismissible: false,
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return CupertinoAlertDialog(
-                                                        title:
-                                                        CupertinoDialogAction(
-                                                          child: Text(
-                                                            "确认取消",
-                                                            style: TextStyle(
-                                                                fontSize: 18,
-                                                                color: Colors
-                                                                    .redAccent),
-                                                          ),
-                                                        ),
-                                                        content:
-                                                        CupertinoDialogAction(
-                                                          child: Text(
-                                                            "订单取消后不可恢复",
-                                                            style: TextStyle(
-                                                                fontSize: 16,
-                                                                color:
-                                                                Colors.black),
-                                                          ),
-                                                        ),
-                                                        actions: <Widget>[
-                                                          CupertinoDialogAction(
-                                                            onPressed: () =>
-                                                                ApiRequest().cancelOrder(context,missedOrder.id).then((_){
-                                                                  Navigator.of(context).pop();
-                                                                  onHeaderRefresh();
-                                                                }),
-                                                            child: Container(
-                                                              child: Text(
-                                                                "确定",
-                                                                style: TextStyle(
-                                                                    fontSize: 16,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          CupertinoDialogAction(
-                                                            onPressed: () {
-                                                              Navigator.pop(
-                                                                  context);
-                                                            },
-                                                            child: Container(
-                                                              child: Text(
-                                                                "取消",
-                                                                style: TextStyle(
-                                                                    fontSize: 14,
-                                                                    color: Colors
-                                                                        .black),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                }):new Container()
+                                            BottomBarHelper().buildCancelButton(context, missedOrder.id):new Container()
                                           ],
                                         ))
                                   ],
@@ -312,8 +157,7 @@ class OrderMissedState extends State<OrderMissed>
                             ],
                           ),
                         ));
-                  });
-            }
+                  })
     ));
   }
 

@@ -7,6 +7,7 @@ import 'package:repair_project/entity/order.dart';
 import 'package:repair_project/entity/qoinfo.dart';
 import 'package:repair_project/http/HttpUtils.dart';
 import 'package:repair_project/http/api_request.dart';
+import 'package:repair_project/ui/order/bottom_bar_helper.dart';
 import 'package:repair_project/ui/order/order_assess.dart';
 import 'package:repair_project/ui/order/order_detail_bean/orders.dart';
 import 'package:repair_project/ui/order/order_details.dart';
@@ -78,16 +79,17 @@ class OrderFinishState extends State<OrderFinish>
   Widget build(BuildContext context) {
     // TODO: implement build
     return Container(
-        color: Colors.grey[200],
-        //decoration: BoxDecoration(color: Colors.grey[200]),
+        //color: Colors.grey[200],
+        decoration: BoxDecoration(color: Colors.grey[200]),
         child: Refresh(
             onFooterRefresh: onFooterRefresh,
             onHeaderRefresh: onHeaderRefresh,
-            childBuilder: (BuildContext context, {ScrollController controller,ScrollPhysics physics}){
-              return _finishedOrders.isEmpty?Text("没有更多的订单了"):
-              ListView.builder(
-                  itemCount: _finishedOrders.length,
+            child: ListView.builder(
+                  itemCount: _finishedOrders.length==0? 1:_finishedOrders.length,
                   itemBuilder: (context, index) {
+                    if(_finishedOrders.length==0){
+                      return Center(child: Text("暂无相关数据~"),);
+                    }
                     var finishOrder = _finishedOrders[index];
                     return Padding(
                         padding: EdgeInsets.fromLTRB(10, 15, 10, 5),
@@ -107,55 +109,29 @@ class OrderFinishState extends State<OrderFinish>
                                     Padding(
                                         padding:
                                         EdgeInsets.only(top: 5, bottom: 20),
-                                        child: Text(finishOrder.description,
-                                            style: TextStyle(
-                                                fontSize: 18,
-                                                color: Colors.black))),
-                                    Text(
-                                      "#" + finishOrder.type,
-                                      style: TextStyle(color: Colors.lightBlue),
+                                        child: Text(finishOrder.description, style: TextStyle(fontSize: 18, color: Colors.black))),
+                                    Text("#" + finishOrder.type, style: TextStyle(color: Colors.lightBlue),
                                     ),
                                     Padding(
-                                        padding:
-                                        EdgeInsets.only(top: 5, bottom: 5),
-                                        child: Text(finishOrder.createTime,
-                                            style:
-                                            TextStyle(color: Colors.grey))),
+                                        padding: EdgeInsets.only(top: 5, bottom: 5),
+                                        child: Text(finishOrder.createTime, style: TextStyle(color: Colors.grey))),
                                     Divider(
                                       height: 2,
                                       color: Colors.grey,
                                     ),
                                     Align(
                                         alignment: FractionalOffset.bottomRight,
-                                        child: OutlineButton(
-                                            borderSide: BorderSide(
-                                                width: 1, color: Colors.grey),
-                                            shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(5))),
-                                            child: finishOrder.orderState==35?Text("评价", style: new TextStyle(
-                                                color: Colors.black)):Text("已评价",style: new TextStyle(
-                                                color: Colors.black)),
-                                            onPressed: (){
-                                              finishOrder.orderState==35?
-                                              Navigator.of(context).push(
-                                                new MaterialPageRoute(
-                                                  builder: (c) {
-                                                    return new Assess(ordersNumber:finishOrder.orderNumber,ordersId:finishOrder.id);
-                                                  },
-                                                ),
-                                              ).then((_){
-                                                onHeaderRefresh();
-                                              }):null;
-                                            }))
+                                        child: finishOrder.orderState==35?
+                                            BottomBarHelper().buildWaitingForFeedbackButton(context, finishOrder.orderNumber, finishOrder.id):
+                                            BottomBarHelper().buildStatusButton("已评价")
+                                        )
                                   ],
                                 ),
                               ),
                             ],
                           ),
                         ));
-                  });
-            }
+                  })
 
     ));
   }

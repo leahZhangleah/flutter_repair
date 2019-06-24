@@ -13,42 +13,48 @@ class OrderDetailFeedbackWidget extends StatelessWidget{
     // TODO: implement build
     OrdersAppraise ordersAppraise = orders.ordersAppraise;
     return ordersAppraise!=null?
-    Column(
-      children: <Widget>[
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Text("创建时间：",style: TextStyle(color: Colors.grey)),
-            Text(ordersAppraise.createTime,style: TextStyle(color: Colors.grey),),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Text("是否解决：",style: TextStyle(color: Colors.grey)),
-            ordersAppraise.isSolve==1?
-            Text("已解决",style: TextStyle(color: Colors.grey),):
-            Text("未解决",style: TextStyle(color: Colors.grey),),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Text("满意度：",style: TextStyle(color: Colors.grey)),
-            SmoothStarRating(
-              allowHalfRating: false,
-              starCount: 5,
-              rating: double.tryParse(ordersAppraise.starLevel.toString()),
-              size: 20.0,
-              color: Colors.lightBlue,
-              borderColor: Colors.grey[350],
-            )
-          ],
-        ),
-        Text(
-            ordersAppraise.content
-        ),
-      ],
+    Container(
+      padding: EdgeInsets.all(10),
+      color: Colors.white,
+      margin: EdgeInsets.only(top: 8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("创建时间：",style: TextStyle(color: Colors.grey)),
+              Text(ordersAppraise.createTime,style: TextStyle(color: Colors.grey),),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("是否解决：",style: TextStyle(color: Colors.grey)),
+              ordersAppraise.isSolve==1?
+              Text("已解决",style: TextStyle(color: Colors.grey),):
+              Text("未解决",style: TextStyle(color: Colors.grey),),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text("满意度：",style: TextStyle(color: Colors.grey)),
+              SmoothStarRating(
+                allowHalfRating: false,
+                starCount: 5,
+                rating: double.tryParse(ordersAppraise.starLevel.toString()),
+                size: 20.0,
+                color: Colors.lightBlue,
+                borderColor: Colors.grey[350],
+              )
+            ],
+          ),
+          Text(
+              ordersAppraise.content
+          ),
+        ],
+      ),
     ):Container();
   }
 

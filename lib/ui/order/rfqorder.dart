@@ -74,16 +74,16 @@ class OrderRFQState extends State<OrderRFQ> with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color:Colors.grey[200],
-        //decoration: BoxDecoration(color: Colors.grey[200]),
+        decoration: BoxDecoration(color: Colors.grey[200]),
         child: Refresh(
             onFooterRefresh: onFooterRefresh,
             onHeaderRefresh: onHeaderRefresh,
-            childBuilder: (BuildContext context, {ScrollController controller,ScrollPhysics physics}){
-              return rfqOrders.isEmpty?Text("没有更多的订单了"):
-              ListView.builder(
-                  itemCount: rfqOrders.length,
+            child: ListView.builder(
+                  itemCount: rfqOrders.length==0?1:rfqOrders.length,
                   itemBuilder: (context, index) {
+                    if(rfqOrders.length==0){
+                      return Center(child: Text("暂无相关数据~"),);
+                    }
                     var rfqOrder = rfqOrders[index];
                     return Padding(
                         padding: EdgeInsets.fromLTRB(10, 15, 10, 5),
@@ -120,7 +120,6 @@ class OrderRFQState extends State<OrderRFQ> with AutomaticKeepAliveClientMixin {
                                             Padding(padding:EdgeInsets.only(left: 20),child:Text("报价员",style: TextStyle(fontSize: 18,color: Colors.black))),
                                           ],),
                                           Align(
-
                                             child: Text("等待报价",style: TextStyle(color: Colors.lightBlue),),
                                             alignment: FractionalOffset.centerRight,)
                                         ],),),
@@ -148,8 +147,7 @@ class OrderRFQState extends State<OrderRFQ> with AutomaticKeepAliveClientMixin {
                             ],
                           ),
                         ));
-                  });
-            }
+                  })
     ));
   }
 

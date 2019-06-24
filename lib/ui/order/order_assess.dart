@@ -37,7 +37,12 @@ class AssessState extends State<Assess> {
             GestureDetector(
                 onTap: () {
                   if (rating != 0) {
-                    ApiRequest().appraiseOrders(context, _assess.text, widget.ordersId, widget.ordersNumber, rating);
+                    ApiRequest().appraiseOrders(context, _assess.text, widget.ordersId, widget.ordersNumber, rating).then((result){
+                      if(result){
+                        setState(() {
+                        });
+                      }
+                    });
                   } else {
                     Fluttertoast.showToast(msg: "请对服务进行评分");
                   }
@@ -51,45 +56,47 @@ class AssessState extends State<Assess> {
                 )))
           ],
         ),
-        body: Container(
-            child: Padding(
-                padding: EdgeInsets.only(left: 15, right: 15),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    TextField(
-                      maxLines: 10,
-                      controller: _assess,
-                      decoration: new InputDecoration(
-                          hintText: "快来写下你对本次服务的评价",
-                          border: InputBorder.none,
-                          hintStyle:
-                              TextStyle(color: Colors.grey[350], fontSize: 18)),
-                    ),
-                    Divider(
-                      height: 20.0,
-                      indent: 2.0,
-                      color: Colors.grey[400],
-                    ),
-                    Text(
-                      "维修评分",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    Padding(
-                        padding: EdgeInsets.only(top: 5),
-                        child: SmoothStarRating(
-                          allowHalfRating: false,
-                          onRatingChanged: (v) {
-                            rating = v;
-                            setState(() {});
-                          },
-                          starCount: 5,
-                          rating: rating,
-                          size: 40.0,
-                          color: Colors.lightBlue,
-                          borderColor: Colors.grey[350],
-                        ))
-                  ],
-                ))));
+        body: SingleChildScrollView(
+          child: Container(
+              child: Padding(
+                  padding: EdgeInsets.only(left: 15, right: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      TextField(
+                        maxLines: 10,
+                        controller: _assess,
+                        decoration: new InputDecoration(
+                            hintText: "快来写下你对本次服务的评价",
+                            border: InputBorder.none,
+                            hintStyle:
+                                TextStyle(color: Colors.grey[350], fontSize: 18)),
+                      ),
+                      Divider(
+                        height: 20.0,
+                        indent: 2.0,
+                        color: Colors.grey[400],
+                      ),
+                      Text(
+                        "维修评分",
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Padding(
+                          padding: EdgeInsets.only(top: 5),
+                          child: SmoothStarRating(
+                            allowHalfRating: false,
+                            onRatingChanged: (v) {
+                              rating = v;
+                              setState(() {});
+                            },
+                            starCount: 5,
+                            rating: rating,
+                            size: 40.0,
+                            color: Colors.lightBlue,
+                            borderColor: Colors.grey[350],
+                          ))
+                    ],
+                  ))),
+        ));
   }
 }

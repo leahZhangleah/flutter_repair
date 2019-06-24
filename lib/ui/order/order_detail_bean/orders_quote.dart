@@ -4,10 +4,10 @@ class OrdersQuote {
   String id;
   String repairsOrdersId;
   String maintainerUserId;
-  int quoteMoney;
-  int subscriptionRate;
-  int subscriptionMoney;
-  int balanceMoney;
+  double quoteMoney;
+  double subscriptionRate;
+  double subscriptionMoney;
+  double balanceMoney;
   String createTime;
   String updateTime;
   int status;

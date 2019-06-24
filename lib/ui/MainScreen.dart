@@ -150,48 +150,51 @@ class HomeState extends State<HomePage> with TickerProviderStateMixin {
         home: Scaffold(
           appBar: null,
           body: new Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Stack(
-                  children: <Widget>[
-                    Transform.rotate(
-                      angle: _rotate.value * 0.0174533,
-                      child: new Container(
-                        width: 535.0,
-                        height: 330.0,
-                        child: FlatButton(
-                          onPressed: () {
-                            if (Platform.isIOS) {
-                              try {
-                                openCamera();
-                              } on PlatformException catch (e) {}
-                            } else {
-                              Navigator.of(context).push(
-                                new MaterialPageRoute(
-                                  builder: (c) {
-                                    return new Camera(cameras: cameras);
-                                  },
-                                ),
-                              );
-                            }
-                          },
-                          color: const Color(0xffffffff),
-                          child: Image.asset("images/homepagebtn.png",
-                              fit: BoxFit.fill),
-                          shape: new CircleBorder(
-                            side: new BorderSide(
-                              color: const Color(0xffffffff),
-                              width: 1.0,
-                              style: BorderStyle.none,
+            child: Container(
+              margin: EdgeInsets.only(top: 10),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Stack(
+                    children: <Widget>[
+                      Transform.rotate(
+                        angle: _rotate.value * 0.0174533,
+                        child: new Container(
+                          width: 535.0,
+                          height: 330.0,
+                          child: FlatButton(
+                            onPressed: () {
+                              if (Platform.isIOS) {
+                                try {
+                                  openCamera();
+                                } on PlatformException catch (e) {}
+                              } else {
+                                Navigator.of(context).push(
+                                  new MaterialPageRoute(
+                                    builder: (c) {
+                                      return new Camera(cameras: cameras);
+                                    },
+                                  ),
+                                );
+                              }
+                            },
+                            color: const Color(0xffffffff),
+                            child: Image.asset("images/homepagebtn.png",
+                                fit: BoxFit.fill),
+                            shape: new CircleBorder(
+                              side: new BorderSide(
+                                color: const Color(0xffffffff),
+                                width: 1.0,
+                                style: BorderStyle.none,
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ));

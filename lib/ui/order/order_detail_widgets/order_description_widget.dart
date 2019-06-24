@@ -77,7 +77,7 @@ class OrderDescriptionWidget extends StatelessWidget{
         builder: (context) {
           return QrImage(
             data: qrCode,
-            size: 200,
+            size: 100,
           );
         }
     );

@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:repair_project/entity/qoinfo.dart';
 import 'package:repair_project/http/HttpUtils.dart';
 import 'package:repair_project/http/api_request.dart';
+import 'package:repair_project/ui/order/bottom_bar_helper.dart';
 import 'package:repair_project/ui/order/order_detail_bean/orders.dart';
 import 'package:repair_project/ui/order/order_details.dart';
 import 'package:repair_project/ui/order/order_list_bean/page.dart';
@@ -80,11 +81,12 @@ class OrderQuoteState extends State<OrderQuote>
         child: Refresh(
             onFooterRefresh: onFooterRefresh,
             onHeaderRefresh: onHeaderRefresh,
-            childBuilder:(BuildContext context, {ScrollController controller,ScrollPhysics physics}){
-              return rfqOrders.isEmpty?Text("没有更多的订单"):
-              ListView.builder(
-                  itemCount: rfqOrders.length,
+            child: ListView.builder(
+                  itemCount: rfqOrders.length==0?1:rfqOrders.length,
                   itemBuilder: (context, index) {
+                    if(rfqOrders.length==0){
+                      return Center(child: Text("暂无相关数据~"),);
+                    }
                     var rfqOrder = rfqOrders[index];
                     return Padding(
                         padding: EdgeInsets.fromLTRB(10, 15, 10, 5),
@@ -104,8 +106,7 @@ class OrderQuoteState extends State<OrderQuote>
                                     Padding(
                                       padding: EdgeInsets.only(top: 5, bottom: 5),
                                       child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Row(
                                             children: <Widget>[
@@ -120,22 +121,15 @@ class OrderQuoteState extends State<OrderQuote>
                                                 ),
                                               ),
                                               Padding(
-                                                  padding:
-                                                  EdgeInsets.only(left: 20),
-                                                  child: Text("维修员",
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          color: Colors.black))),
+                                                  padding:EdgeInsets.only(left: 20),
+                                                  child: Text("维修员",style: TextStyle(fontSize: 18,color: Colors.black))),
                                             ],
                                           ),
                                           Align(
-                                            child: Text(
-                                              "已报价",
-                                              style: TextStyle(
-                                                  color: Colors.lightBlue),
+                                            child: Text("已报价",
+                                              style: TextStyle(color: Colors.lightBlue),
                                             ),
-                                            alignment:
-                                            FractionalOffset.centerRight,
+                                            alignment:FractionalOffset.centerRight,
                                           )
                                         ],
                                       ),
@@ -145,70 +139,46 @@ class OrderQuoteState extends State<OrderQuote>
                                       color: Colors.grey,
                                     ),
                                     Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                      mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment:CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Expanded(flex:3,child:Column(
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          crossAxisAlignment:CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 10, bottom: 20),
+                                                padding: EdgeInsets.only(top: 10, bottom: 20),
                                                 child: Text(
                                                     rfqOrder.description,
                                                     overflow: TextOverflow.ellipsis,
                                                     style: TextStyle(
                                                         fontSize: 18,
                                                         color: Colors.black))),
-                                            Text(
-                                              "#" + rfqOrder.type,
-                                              style: TextStyle(
-                                                  color: Colors.lightBlue),
-                                            ),
+                                            Text("#" + rfqOrder.type,style: TextStyle(color: Colors.lightBlue),),
                                             Padding(
-                                                padding: EdgeInsets.only(
-                                                    top: 5, bottom: 5),
-                                                child: Text(
-                                                    rfqOrder.createTime,
-                                                    style: TextStyle(
-                                                        color: Colors.grey)))
+                                                padding: EdgeInsets.only(top: 5, bottom: 5),
+                                                child: Text(rfqOrder.createTime,style: TextStyle(color: Colors.grey)))
                                           ],
                                         )),
                                         Column(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          mainAxisAlignment:MainAxisAlignment.center,
+                                          crossAxisAlignment:CrossAxisAlignment.start,
                                           children: <Widget>[
                                             Padding(
-                                              child: Text(
-                                                "定金：" +
-                                                    rfqOrder.ordersQuote.subscriptionMoney
-                                                        .toString() +
-                                                    "元",
+                                              child: Text("定金：" +rfqOrder.ordersQuote.subscriptionMoney.toString() +"元",
                                                 style: TextStyle(fontSize: 16),
                                               ),
                                               padding: EdgeInsets.only(top: 10),
                                             ),
                                             Padding(
                                               child: Text(
-                                                "尾款：" +
-                                                    rfqOrder.ordersQuote.balanceMoney
-                                                        .toString() +
-                                                    "元",
+                                                "尾款：" +rfqOrder.ordersQuote.balanceMoney.toString() +"元",
                                                 style: TextStyle(fontSize: 16),
                                               ),
                                               padding: EdgeInsets.only(top: 10),
                                             ),
                                             Padding(
                                               child: Text(
-                                                "合计：" +
-                                                    rfqOrder.ordersQuote.quoteMoney
-                                                        .toString() +
-                                                    "元",
+                                                "合计：" +rfqOrder.ordersQuote.quoteMoney.toString() +"元",
                                                 style: TextStyle(fontSize: 16),
                                               ),
                                               padding: EdgeInsets.only(top: 10),
@@ -223,121 +193,29 @@ class OrderQuoteState extends State<OrderQuote>
                                     ),
                                     rfqOrder.orderState == 15
                                         ? Row(
-                                      mainAxisAlignment:
-                                      MainAxisAlignment.end,
+                                      mainAxisAlignment:MainAxisAlignment.end,
                                       children: <Widget>[
-                                        OutlineButton(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.lightBlue),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.all(
-                                                  Radius.circular(5))),
-                                          onPressed: () =>
-                                              Navigator.push(context,
-                                                  new MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                      context) {
-                                                        return new Paypage(
-                                                            tile: "支付定金",
-                                                            cost: num.parse(rfqOrder.ordersQuote.subscriptionMoney.toString()),
-                                                            type:5,
-                                                            orderId: rfqOrder.id,
-                                                            des: rfqOrder
-                                                                .description);
-                                                      })),
-                                          child: Container(
-                                            child: Text("付定金",
-                                                style: new TextStyle(
-                                                    color:
-                                                    Colors.lightBlue)),
-                                          ),
-                                        )
+                                        BottomBarHelper().buildQuotedButton(context, rfqOrder.id, rfqOrder.description, rfqOrder.ordersQuote.subscriptionMoney.toString())
                                       ],
                                     )
                                         : rfqOrder.orderState == 30
                                         ? Align(
                                         alignment:
                                         FractionalOffset.bottomRight,
-                                        child: OutlineButton(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.lightBlue),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.all(
-                                                  Radius.circular(
-                                                      5))),
-                                          onPressed: () =>
-                                              Navigator.push(context,
-                                                  new MaterialPageRoute(
-                                                      builder: (BuildContext
-                                                      context) {
-                                                        return new Paypage(
-                                                            tile: "支付尾款",
-                                                            cost: num.parse(rfqOrder.ordersQuote.balanceMoney.toString()),
-                                                            type:10,
-                                                            orderId: rfqOrder.id,
-                                                            des: rfqOrder
-                                                                .description);
-                                                      })),
-                                          child: Container(
-                                              child: RichText(
-                                                  textScaleFactor: 1.0,
-                                                  text: TextSpan(
-                                                      text: '(维修已完成) ',
-                                                      style: TextStyle(
-                                                          color: Colors
-                                                              .grey),
-                                                      children: <
-                                                          TextSpan>[
-                                                        TextSpan(
-                                                            text: '付尾款',
-                                                            style: TextStyle(
-                                                                fontSize:
-                                                                16,
-                                                                color: Colors
-                                                                    .lightBlue)),
-                                                      ]),
-                                                  textAlign:
-                                                  TextAlign.center)),
-                                        ))
-                                        : Align(
-                                        alignment:
-                                        FractionalOffset.bottomRight,
-                                        child: OutlineButton(
-                                          borderSide: BorderSide(
-                                              width: 1,
-                                              color: Colors.lightBlue),
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                              BorderRadius.all(
-                                                  Radius.circular(
-                                                      5))),
-                                          onPressed: null,
-                                          child: Container(
-                                              child: rfqOrder
-                                                  .orderState == 22
-                                                  ? Text("待维修",
-                                                  style: new TextStyle(
-                                                      color: Colors
-                                                          .lightBlue))
-                                                  : Text("维修中",
-                                                  style: new TextStyle(
-                                                      color: Colors
-                                                          .lightBlue))),
-                                        )),
+                                        child: BottomBarHelper().buildMaintainFinishedButton(context, rfqOrder.ordersQuote.balanceMoney.toString(), rfqOrder.id, rfqOrder.description))
+                                        : Align(alignment:FractionalOffset.bottomRight,
+                                        child: rfqOrder.orderState == 22?
+                                          BottomBarHelper().buildStatusButton("待维修"):
+                                          BottomBarHelper().buildStatusButton("维修中")
+                                          ),
                                   ],
                                 ),
                               ),
                             ],
                           ),
                         ));
-                  });
-            }
-
-    ));
+                  }
+    )));
   }
 
   @override
