@@ -30,9 +30,9 @@ class OrdersQuote {
     id = json['id'];
     repairsOrdersId = json['repairsOrdersId'];
     maintainerUserId = json['maintainerUserId'];
-    quoteMoney = json['quoteMoney'];
-    subscriptionRate = json['subscriptionRate'];
-    subscriptionMoney = json['subscriptionMoney'];
+    quoteMoney = num.parse(json['quoteMoney']);
+    subscriptionRate = num.parse(json['subscriptionRate']);
+    subscriptionMoney = num.parse(json['subscriptionMoney']);
     balanceMoney = json['balanceMoney'];
     createTime = json['createTime'];
     updateTime = json['updateTime'];

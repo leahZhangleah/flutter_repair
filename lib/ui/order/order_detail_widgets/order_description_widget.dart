@@ -54,7 +54,7 @@ class OrderDescriptionWidget extends StatelessWidget{
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(5))
                 ),
-                onPressed: ()=>showQrCode(context,orders.qrcodeOrders),
+                onPressed: ()=>showQrCode(context,orders.id),
               )
             ],
           ),
@@ -75,9 +75,11 @@ class OrderDescriptionWidget extends StatelessWidget{
         context: context,
         barrierDismissible: true,
         builder: (context) {
-          return QrImage(
+          return Center(
+            child: QrImage(
+              backgroundColor: Colors.white,
             data: qrCode,
-            size: 100,
+            size: 150,),
           );
         }
     );

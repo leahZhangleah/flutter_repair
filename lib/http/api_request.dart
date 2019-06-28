@@ -30,6 +30,12 @@ class ApiRequest{
     return token;
   }
 
+  Future<String> getAccount() async{
+    SharedPreferences sp = await SharedPreferences.getInstance();
+    String account = sp.getString("account");
+    return account;
+  }
+
   void saveServiceCharge(String service)async{
     SharedPreferences sp = await SharedPreferences.getInstance();
     sp.setString("service", service);
@@ -40,12 +46,13 @@ class ApiRequest{
     String service = sp.getString("service");
     if(service !=null){
       return service;
+    }else{
+      return null;
     }
-    return null;
   }
 
   //todo: get service fee
-  Future<void> getRepairsServiceCharge(BuildContext context)async{
+  Future<String> getRepairsServiceCharge(BuildContext context)async{
     bool internet = await RequestManager.hasInternet();
     if(internet){
       try{
@@ -59,10 +66,12 @@ class ApiRequest{
           if(charge.isclose==0){
               String service = charge.serviceCharge;
               saveServiceCharge(service);
+              return service;
           }
         }
       }on DioError catch(e){
         handleDioError(e);
+        return null;
       }
     }
   }
@@ -422,7 +431,7 @@ class ApiRequest{
 
 
   //拒绝报价
-  Future<void> refuseOrderQuote(BuildContext context,String id) async {
+  Future<bool> refuseOrderQuote(BuildContext context,String id) async {
     bool internet = await RequestManager.hasInternet();
     if(internet){
       try{
@@ -436,9 +445,11 @@ class ApiRequest{
           //todo: toast msg to user to tell if user has refused the quote successfully
           var json = jsonDecode(resultModel.data.toString());
           Fluttertoast.showToast(msg: json['msg']);
+          return true;
         }
       }on DioError catch(e){
         handleDioError(e);
+        return false;
       }
 
     }

@@ -9,7 +9,7 @@ import 'package:repair_project/ui/classify.dart';
 import 'package:repair_project/ui/publish_repair.dart';
 import 'package:repair_project/ui/repair_classify.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:jpush_flutter/jpush_flutter.dart';
+
 
 enum Actions{Increase}
 
@@ -17,35 +17,9 @@ Future<void> main() async {//入口
   Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.storage,PermissionGroup.camera,PermissionGroup.speech]);
   //入口
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  _initJPush();
   runApp(new Rooter());
 }
 
-void _initJPush()async {
-  JPush jPush = new JPush();
-  jPush.addEventHandler(
-    onReceiveNotification: (Map<String,dynamic> message)async{
-      print("flutter onReceiveNotification: $message");
-    },
-    onOpenNotification: (Map<String,dynamic> message) async{
-      print("flutter onOpenNotification: $message");
-    },
-    onReceiveMessage: (Map<String,dynamic> message)async{
-      print("flutter onReceiveMessage:$message");
-    }
-  );
-  jPush.setup(
-    appKey: "819b32fa0f489cf5233ca90c",
-    channel: "repairChannel",
-    production: false,
-    debug: false // 设置是否打印 debug 日志
-  );
-
-  jPush.getRegistrationID().then((rid){
-    print("the registration id is: $rid");
-  });
-
-}
 
 class Rooter extends StatefulWidget {
 
@@ -81,7 +55,6 @@ class AppState extends State<Rooter> with SingleTickerProviderStateMixin {
     setState(() {
       key=token;
       account = phoneNo;
-
     });
     return token;
   }

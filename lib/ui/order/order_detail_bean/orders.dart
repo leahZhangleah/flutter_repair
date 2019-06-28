@@ -26,7 +26,6 @@ class Orders{
   MaintainerUser maintainerUser;
   List<MaintainerDescriptionList> maintainerDescriptionList;
   OrdersAppraise ordersAppraise;
-  String qrcodeOrders;
 
   Orders(
       {this.id,
@@ -47,8 +46,7 @@ class Orders{
         this.ordersQuote,
         this.maintainerUser,
         this.maintainerDescriptionList,
-        this.ordersAppraise,
-        this.qrcodeOrders});
+        this.ordersAppraise,});
 
   Orders.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -94,9 +92,6 @@ class Orders{
     ordersAppraise = json['ordersAppraise']!=null
         ? new OrdersAppraise.fromJson(json['ordersAppraise'])
         :null;
-    qrcodeOrders = json['qrcodeOrders']!=null
-        ?json['qrcodeOrders']
-        :"";
   }
 
   Map<String, dynamic> toJson() {
@@ -136,7 +131,6 @@ class Orders{
     if (this.ordersAppraise != null) {
       data['ordersAppraise'] = this.ordersAppraise.toJson();
     }
-    data['qrcodeOrders'] = this.qrcodeOrders;
     return data;
   }
 }

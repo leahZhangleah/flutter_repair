@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:repair_project/http/api_request.dart';
 import 'package:repair_project/ui/MainScreen.dart';
 import 'package:repair_project/ui/order/order_assess.dart';
+import 'package:repair_project/ui/order/orderlist.dart';
 import 'package:repair_project/ui/pay/pay_%20servicefee.dart';
 import 'package:repair_project/ui/pay/pay_page.dart';
 class BottomBarHelper{
@@ -208,7 +209,13 @@ class BottomBarHelper{
           ),
           actions: <Widget>[
             CupertinoDialogAction(
-              onPressed: () => ApiRequest().refuseOrderQuote(context,id),
+              onPressed: () => ApiRequest().refuseOrderQuote(context,id).then((result){
+                if(result){
+                  Navigator.of(context).pushAndRemoveUntil(
+                      new MaterialPageRoute(builder: (c) => new OrderList(sindex: 1,)
+                      ), (route) => route == null);
+                }
+              }),
               child: Container(
                 child: Text("确定", style: TextStyle(fontSize: 16, color: Colors.black),
                 ),

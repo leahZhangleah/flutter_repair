@@ -13,6 +13,7 @@ import 'package:repair_project/ui/personal_info/personal_info_api.dart';
 import 'package:repair_project/ui/publish_repair.dart';
 import 'package:repair_project/ui/personal_info/mine_page.dart';
 import 'package:repair_project/ui/repair_service/repairs_service_response.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 /**
  * 主界面
  */
@@ -35,10 +36,39 @@ class MainScreenState extends State<Main> with SingleTickerProviderStateMixin {
 
   void initState(){
     super.initState();
+    _initJPush();
     ApiRequest().getRepairsServiceCharge(context);
     if(widget.tabindex!=null){
       _tabIndex = widget.tabindex;
     }return;
+  }
+
+  void _initJPush()async {
+    JPush jPush = new JPush();
+    jPush.addEventHandler(
+        onReceiveNotification: (Map<String,dynamic> message)async{
+          print("flutter onReceiveNotification: $message");
+        },
+        onOpenNotification: (Map<String,dynamic> message) async{
+          print("flutter onOpenNotification: $message");
+        },
+        onReceiveMessage: (Map<String,dynamic> message)async{
+          print("flutter onReceiveMessage:$message");
+        }
+    );
+    jPush.setup(
+        appKey: "76251c39cb0b04ba103ead2d",
+        channel: "repairChannel",
+        production: false,
+        debug: false // 设置是否打印 debug 日志
+    );
+
+    String account = await ApiRequest().getAccount();
+    jPush.setAlias(account);
+    jPush.getRegistrationID().then((rid){
+      print("the registration id is: $rid");
+    });
+
   }
 
 
